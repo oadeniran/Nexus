@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-import styles from './HistoryOverlay.module.css'; // Reuse the glass styles!
+import styles from './HistoryHelpOverlay.module.css';
 
 interface Props {
   isOpen: boolean;
@@ -49,19 +49,26 @@ export default function HelpModal({ isOpen, onClose }: Props) {
   if (!isOpen) return null;
 
   return (
-    <div className={styles.overlay} style={{ zIndex: 3000 }}>
+    <div 
+      className={styles.overlay} 
+      style={{ zIndex: 3000 }} // This one-off inline style is fine
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className={styles.overlayHeader}>
         <h2 className={styles.overlayTitle}>User Manual</h2>
         <button className={styles.closeBtn} onClick={onClose}>✕</button>
       </div>
       
       <div className={styles.scrollContainer}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', color: '#eee' }}>
-           <div className={styles.card} style={{ cursor: 'default' }}>
+        <div className={styles.helpContainer}>
+           <div className={`${styles.card} ${styles.helpCard}`}>
               <div className={styles.markdown}>
                 <ReactMarkdown>{helpContent}</ReactMarkdown>
               </div>
            </div>
+
         </div>
       </div>
     </div>

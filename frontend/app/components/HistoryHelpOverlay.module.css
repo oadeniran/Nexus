@@ -1,0 +1,241 @@
+/* app/components/HistoryOverlay.module.css */
+
+/* 1. The Main Container - Pinned to the viewport */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh; /* Takes full height */
+  z-index: 100;
+  
+  /* Flexbox Layout: Header Top, Scrollable Content Bottom */
+  display: flex;
+  flex-direction: column;
+  
+  /* Visuals */
+  background: rgba(15, 15, 20, 0.95); /* Dark background for readability */
+  backdrop-filter: blur(15px);
+  animation: fadeIn 0.3s ease;
+  
+  /* IMPORTANT: Reset padding here so Flexbox controls spacing */
+  padding: 0; 
+  box-sizing: border-box;
+}
+
+/* 2. The Header - Fixed height, never shrinks */
+.overlayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px; /* Comfortable padding */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0; /* Prevents header from collapsing */
+}
+
+.overlayTitle {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  
+  /* Gradient Text */
+  background: linear-gradient(90deg, #60a5fa, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* Takes full height of scrollContainer */
+  width: 100%;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Inter', sans-serif;
+  gap: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.loadingContainer p {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* 3. The Scrollable Area - Fills remaining space */
+.scrollContainer {
+  flex-grow: 1; /* Takes all remaining height */
+  overflow-y: auto; /* Internal scrollbar */
+  padding: 30px; /* Padding for the content inside */
+  width: 100%;
+  box-sizing: border-box;
+  
+  /* Smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch; 
+}
+
+/* 4. The Close Button (Now part of the Header Flex flow) */
+/* REMOVED 'position: fixed' to avoid it floating weirdly */
+.closeBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.closeBtn:hover {
+  background: white;
+  color: black;
+  transform: scale(1.1);
+}
+
+/* --- GRID & CARD STYLES --- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 50px; /* Extra space at bottom for scrolling */
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: fit-content;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.expanded {
+  grid-column: span 3;
+  background: #000;
+  border-color: #3b82f6;
+  cursor: default;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  align-items: flex-start;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.badge.scribe { background: #3b82f6; color: white; }
+.badge.debate { background: #ef4444; color: white; }
+.badge.coach { background: #10b981; color: white; }
+
+.date { color: #888; font-size: 0.8rem; }
+.title { margin: 0 0 10px 0; font-size: 1.1rem; color: white; font-weight: 600; }
+.description { color: #aaa; font-size: 0.9rem; line-height: 1.5; }
+
+.collapseBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.collapseBtn:hover { background: rgba(255, 255, 255, 0.3); border-color: white; }
+
+/* Markdown Styles */
+.markdown {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+  color: #ddd;
+  line-height: 1.6;
+}
+.markdown h1, .markdown h2 { color: white; margin-top: 20px; margin-bottom: 10px; }
+.markdown ul, .markdown ol { padding-left: 20px; margin-bottom: 15px; }
+.markdown p { margin-bottom: 15px; }
+
+/* --- HELP MODAL SPECIFIC --- */
+
+.helpContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  /* Removed 'padding' here because .scrollContainer handles it */
+}
+
+.helpCard {
+  cursor: default;
+  transform: none !important;
+  background: rgba(255, 255, 255, 0.05); /* Slightly lighter for readability */
+  border: none;
+}
+.helpCard:hover {
+  box-shadow: none;
+  border: none;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .expanded { grid-column: span 2; }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+  .expanded { grid-column: span 1; }
+  
+  .overlayHeader {
+    padding: 15px 20px; /* Tighter header */
+  }
+  
+  .overlayTitle {
+    font-size: 1.1rem; /* Smaller title */
+  }
+  
+  .scrollContainer {
+    padding: 15px; /* Tighter content padding */
+  }
+  
+  .helpContainer {
+    width: 100%; /* Ensure full width usage */
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
