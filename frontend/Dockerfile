@@ -7,14 +7,17 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy app code
+# Copy code
 COPY . .
 
-# Build Next.js
+# Build 
 RUN npm run build
 
-# Expose port
+# Copy Entrypoint Script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 3000
 
-# Start command
-CMD ["npm", "start"]
+# Use the entrypoint script to generate env.js at runtime
+ENTRYPOINT ["/entrypoint.sh"]

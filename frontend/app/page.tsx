@@ -6,12 +6,12 @@ import HelpModal from './components/HelpModal';
 import { useConversation } from '@11labs/react';
 import { useCallback, useState, useEffect, useRef } from 'react';
 
-import { API_URL } from '../lib/config';
+import { AGENT_ID_ROUTER, AGENT_ID_DEBATER, AGENT_ID_COACH, API_URL } from '../lib/config';
 
 const AGENTS = {
-  router: process.env.NEXT_PUBLIC_AGENT_ID_ROUTER,
-  debate: process.env.NEXT_PUBLIC_AGENT_ID_DEBATER,
-  coach: process.env.NEXT_PUBLIC_AGENT_ID_COACH,
+  router: AGENT_ID_ROUTER,
+  debate: AGENT_ID_DEBATER,
+  coach: AGENT_ID_COACH,
 };
 
 export default function Home() {

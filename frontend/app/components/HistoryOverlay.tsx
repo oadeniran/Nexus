@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styles from './HistoryOverlay.module.css';
 
-import { API_URL } from '../lib/config';
+import { API_URL } from '../../lib/config';
 
 interface Session {
   id: string;
