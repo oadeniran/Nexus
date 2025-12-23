@@ -1,0 +1,187 @@
+/* app/home.module.css */
+
+/* 1. The Main Container with "Tech" Background */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  
+  /* Deep Void Color */
+  background-color: #050505;
+  
+  /* Subtle Grid Pattern (The "Blueprint" look) */
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 2. The Header (Logo + Menu) */
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box; /* Ensures padding doesn't widen the page */
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between badge and button */
+}
+
+/* The Mode Badge (Visual only) */
+.modeBadge {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 3. The Decorative Logo */
+.logo {
+  font-family: 'Inter', sans-serif; /* Uses Next.js default font */
+  font-size: 1.5rem;
+  font-weight: 200; /* Thin and elegant */
+  letter-spacing: 8px; /* W  I  D  E text */
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  cursor: default;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between Logo and ? */
+}
+
+
+.helpBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  
+  width: 28px;
+  height: 28px;
+  border-radius: 50%; /* Circle */
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  z-index: 20; /* Ensure it sits above any orb glow */
+}
+
+.helpBtn:hover {
+  background: white;
+  color: black;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* 4. The Menu Button (For future Feeds) */
+.menuBtn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.menuBtn:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+  color: white;
+}
+
+/* 5. The Orb (Unchanged) */
+.orb {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #60a5fa, #3b82f6);
+  box-shadow: 0 0 60px rgba(59, 130, 246, 0.6);
+  animation: breathe 4s infinite ease-in-out;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.orb:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 80px rgba(59, 130, 246, 0.8);
+}
+
+/* 6. Status Text */
+.status {
+  margin-top: 50px;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: fadeText 4s infinite ease-in-out;
+}
+
+/* Animations */
+@keyframes breathe {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+@keyframes fadeText {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.3; }
+}
+
+@media (max-width: 768px) {
+  /* Shrink the Orb */
+  .orb {
+    width: 120px;
+    height: 120px;
+  }
+
+  /* Stack the Header elements */
+  .header {
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .headerRight {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap; /* Allow buttons to wrap if tight */
+  }
+
+  .logoGroup {
+    margin-bottom: 10px;
+  }
+
+  /* Adjust Text Sizes */
+  .status {
+    font-size: 0.9rem;
+    margin-top: 30px;
+    padding: 0 20px;
+    text-align: center;
+  }
+}

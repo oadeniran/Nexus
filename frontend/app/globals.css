@@ -1,0 +1,12 @@
+/* app/globals.css */
+:root {
+  background-color: #050505; /* Deep Void Black */
+  color: white;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden; /* Prevents scrolling */
+}
