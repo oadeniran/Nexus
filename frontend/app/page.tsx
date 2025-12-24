@@ -97,13 +97,14 @@ export default function Home() {
     }
   };
 
-  // TOOL 1: Change Mode (Debate/Coach -> Router)
+  // TOOL 1: Change Mode (Router -> Debate/Coach -> Router)
   const handleChangeMode = async ({ mode, topic }: { mode: string, topic?: string }) => {
     await conversation.endSession();
 
     let retrievedContext = "";
     // Save the topic if it exists
     // If we are leaving a specialist mode, SAVE the session first
+    if (activeAgentId === AGENTS.router) await saveSessionToBackend("scribe");
     if (activeAgentId === AGENTS.debate) await saveSessionToBackend("debate");
     if (activeAgentId === AGENTS.coach) await saveSessionToBackend("coach");
 
