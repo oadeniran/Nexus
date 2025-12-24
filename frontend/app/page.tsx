@@ -14,17 +14,56 @@ const AGENTS = {
   coach: AGENT_ID_COACH,
 };
 
+const HINTS = [
+  "💡 Have a raw idea? Just start talking. Nexus will structure your thoughts.",
+  "⚔️ Want to stress-test your idea? Say 'Switch to Debate'.",
+  "🎤 Presentation tomorrow? Say 'Switch to Coach' to rehearse.",
+  "🧠 Nexus remembers past sessions. Ask it to 'Search Memory' on a topic for debate by saying \"Let's debate about my Smartchip ideas\".",
+];
+
 export default function Home() {
   const [activeAgentId, setActiveAgentId] = useState(AGENTS.router);
   const [statusMessage, setStatusMessage] = useState("Tap to Initialize");
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [userId, setUserId] = useState<string>("");
+  const [hintIndex, setHintIndex] = useState(0);
+  const [fade, setFade] = useState(true);
 
   // NEW: Auto-open Help on Load
   useEffect(() => {
     setIsHelpOpen(true);
   }, []); // Empty dependency array = runs once on mount
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false); // Start fade out
+      setTimeout(() => {
+        setHintIndex((prev) => (prev + 1) % HINTS.length); // Change text
+        setFade(true); // Fade in
+      }, 500); // Wait for fade out to finish
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
   
+  // INITIALIZE USER ID ON MOUNT
+  useEffect(() => {
+    // Check Local Storage
+    let storedId = localStorage.getItem("nexus_user_id");
+    
+    if (!storedId) {
+      // Generate new UUID if none exists
+      storedId = crypto.randomUUID(); 
+      localStorage.setItem("nexus_user_id", storedId);
+      console.log("Generated new Guest ID:", storedId);
+    } else {
+      console.log("Restored Guest ID:", storedId);
+    }
+    
+    setUserId(storedId);
+    setIsHelpOpen(true); // Open help on first load
+  }, []);
+
   // THE STENOGRAPHER: Keep a running log of who said what
   const transcriptRef = useRef<{ role: string; content: string }[]>([]);
 
@@ -48,7 +87,7 @@ export default function Home() {
         body: JSON.stringify({
           session_type: type, // 'scribe', 'debate', or 'coach'
           dialogue: sessionData,
-          user_id: "user_123"
+          user_id: userId
         })
       });
       // Clear transcript after save
@@ -83,7 +122,7 @@ export default function Home() {
         const res = await fetch(`${API_URL}/api/search`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: topic, user_id: "user_123", limit: 1 })
+          body: JSON.stringify({ query: topic, user_id: userId, limit: 1 })
         });
         const data = await res.json();
         
@@ -145,7 +184,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           query: query,
-          user_id: "user_123",
+          user_id: userId,
           limit: 1 // We only need the top result for context
         })
       });
@@ -260,11 +299,13 @@ export default function Home() {
     <main className={styles.container}>
       <HistoryOverlay 
          isOpen={isHistoryOpen} 
-         onClose={() => setIsHistoryOpen(false)} 
+         onClose={() => setIsHistoryOpen(false)}
+         userId={userId}
        />
        <HelpModal 
          isOpen={isHelpOpen} 
-         onClose={() => setIsHelpOpen(false)} 
+         onClose={() => setIsHelpOpen(false)}
+         userId={userId}
        />
       <header className={styles.header}>
         <div className={styles.logoGroup}>
@@ -313,6 +354,10 @@ export default function Home() {
       ></div>
 
       <p className={styles.status}>{statusMessage}</p>
+     
+      <p className={`${styles.hintText} ${fade ? styles.fadeIn : styles.fadeOut}`}>
+        {HINTS[hintIndex]}
+      </p>
     </main>
   );
 }

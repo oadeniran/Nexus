@@ -1,74 +1,109 @@
-import ReactMarkdown from 'react-markdown';
-import styles from './HistoryHelpOverlay.module.css';
+// app/components/HelpModal.tsx
+import { useState } from 'react';
+import styles from './HelpModal.module.css';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  userId: string;
 }
 
-const helpContent = `
-# Nexus: The Founder's Second Brain
+const SLIDES = [
+  {
+    icon: "✍️",
+    title: "The Scribe",
+    text: "Your default mode. Don't worry about structure—just speak. Nexus captures your raw stream of consciousness and converts it into organized, clear notes."
+  },
+  {
+    icon: "⚔️",
+    title: "The Debater",
+    text: "Stop the echo chamber. Say 'Switch to Debate' to summon Roger, a skeptic who challenges your assumptions and finds the flaws in your plan."
+  },
+  {
+    icon: "🎤",
+    title: "The Coach",
+    text: "Prepare for high-stakes meetings.'Switch to Coach'. Sarah will listen to your pitch and interrupt with tough questions."
+  },
+  {
+    icon: "🧠",
+    title: "Memory Vault",
+    text: "Nexus never forgets. Ask 'What was my idea about drones?' to search past conversations, or check your History to see all saved notes."
+  }
+];
 
-**Nexus is a voice-first cognitive architecture designed to accelerate the journey from "fleeting thought" to "executed strategy."**
+export default function HelpModal({ isOpen, onClose, userId }: Props) {
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-Founders and builders often lose their best ideas to friction or refine them in an echo chamber. Nexus solves this by providing specialized AI agents that act as your Scribe, your Skeptic, and your Coach—all through natural conversation.
-
-## Operational Modes
-
-### 1. The Scribe (Capture & Structure)
-* **The Problem:** You have a brilliant idea while walking or driving, but typing it out breaks your flow.
-* **The Solution:** Speak freely. Nexus acts as a strategic partner, filtering the noise from your stream of consciousness and converting it into structured, high-fidelity Markdown notes.
-* **The Output:** Raw thoughts become organized assets instantly saved to your Memory Vault.
-
-### 2. The Debater (Validation Stress-Test)
-* **The Problem:** The "Echo Chamber." It feels good when everyone agrees with you, but it's dangerous for business.
-* **The Persona:** "Roger" – A skeptical Venture Capitalist / Senior Engineer.
-* **The Workflow:** Nexus recalls your specific idea and simulates an adversarial feedback loop. It challenges your assumptions, exposes logic gaps, and forces you to defend your feasibility.
-* **Command:** *"Switch to Debate."*
-
-### 3. The Coach (Pitch & Execution)
-* **The Problem:** Rehearsing in your head is easy; rehearsing for a hostile audience is hard.
-* **The Persona:** "Sarah" – A fast-paced Pitch Coach.
-* **The Workflow:** There are no slides to hide behind. You simply present your pitch to Nexus. The agent analyzes your narrative flow, clarity, and pacing in real-time, interrupting you with the difficult questions a real stakeholder would ask.
-* **Command:** *"Switch to Coach."*
-
----
-
-## Intelligence Engine
-
-Nexus utilizes a persistent **Vector Memory System** to maintain continuity. It doesn't just "hear" you; it "remembers" you.
-
-* **Zero-Loss Handoff:** When you switch from *Ideating* to *Debating*, the full context of your idea is whispered to the new agent instantly. No need to repeat yourself.
-* **Semantic Recall:** Ask Nexus to retrieve details from months ago. *Example: "What was the revenue model I proposed for the drone project?"*
-
-## Controls
-* **Memory Vault (History):** A transparent archive of your intellectual property—transcripts, summaries, and debate reports.
-`;
-
-export default function HelpModal({ isOpen, onClose }: Props) {
   if (!isOpen) return null;
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (currentSlide < SLIDES.length - 1) {
+      setCurrentSlide(currentSlide + 1);
+    } else {
+      onClose();
+      // Reset after animation completes
+      setTimeout(() => setCurrentSlide(0), 300);
+    }
+  };
 
   return (
     <div 
       className={styles.overlay} 
-      style={{ zIndex: 3000 }} // This one-off inline style is fine
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className={styles.overlayHeader}>
-        <h2 className={styles.overlayTitle}>User Manual</h2>
-        <button className={styles.closeBtn} onClick={onClose}>✕</button>
+      {/* HEADER */}
+      <div className={styles.header}>
+        <h2 className={styles.title}>Welcome to Nexus</h2>
       </div>
       
-      <div className={styles.scrollContainer}>
-        <div className={styles.helpContainer}>
-           <div className={`${styles.card} ${styles.helpCard}`}>
-              <div className={styles.markdown}>
-                <ReactMarkdown>{helpContent}</ReactMarkdown>
-              </div>
-           </div>
+      {/* CENTERED SLIDE */}
+      <div className={styles.slideContainer}>
+        <div className={styles.slideIcon}>
+          {SLIDES[currentSlide].icon}
+        </div>
+        
+        <h3 className={styles.slideTitle}>
+          {SLIDES[currentSlide].title}
+        </h3>
+        
+        <p className={styles.slideText}>
+          {SLIDES[currentSlide].text}
+        </p>
+      </div>
 
+      {/* FOOTER CONTROLS */}
+      <div className={styles.footer}>
+        <div className={styles.dots}>
+          {SLIDES.map((_, index) => (
+            <div 
+              key={index}
+              className={`${styles.dot} ${index === currentSlide ? styles.active : ''}`}
+              onClick={(e) => {
+                 e.stopPropagation();
+                 setCurrentSlide(index);
+              }}
+            />
+          ))}
+        </div>
+
+        <div className={styles.buttonGroup}>
+            
+            {/* 1. The Skip/Close Button */}
+            <button className={styles.secondaryBtn} onClick={onClose}>
+                Skip
+            </button>
+
+            {/* 2. The Main Next Button */}
+            <button className={styles.actionBtn} onClick={handleNext}>
+                {currentSlide === SLIDES.length - 1 ? "Get Started" : "Next"}
+            </button>
+        </div>
+
+        <div className={styles.idLabel}>
+           Session: {userId.slice(0, 8)}...
         </div>
       </div>
     </div>

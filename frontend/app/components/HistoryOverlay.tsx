@@ -1,7 +1,7 @@
 // app/components/HistoryOverlay.tsx
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import styles from './HistoryHelpOverlay.module.css';
+import styles from './HistoryOverlay.module.css';
 
 import { API_URL } from '../../lib/config';
 
@@ -17,20 +17,21 @@ interface Session {
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  userId: string;
 }
 
-export default function HistoryOverlay({ isOpen, onClose }: Props) {
+export default function HistoryOverlay({ isOpen, onClose, userId }: Props) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch history when opened
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && userId) {
       // 2. START LOADING
       setIsLoading(true);
       
-      fetch(`${API_URL}/api/history?user_id=user_123`)
+      fetch(`${API_URL}/api/history?user_id=${userId}`)
         .then(res => res.json())
         .then(data => setSessions(data.history))
         .catch(err => console.error("Failed to load history", err))
@@ -39,7 +40,7 @@ export default function HistoryOverlay({ isOpen, onClose }: Props) {
           setIsLoading(false);
         });
     }
-  }, [isOpen]);
+  }, [isOpen, userId]);
 
   if (!isOpen) return null;
 

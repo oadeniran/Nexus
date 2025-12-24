@@ -45,6 +45,11 @@ async def save_session(req: SaveSessionRequest):
         future_desc, 
         future_embed
     )
+    
+    # Check for "NO CONTENT AVAILABLE" in the markdown content
+    if md_content.strip() == "NO CONTENT AVAILABLE":
+        md_content = "No coherent content was detected in this session."
+        return {"status": "no_content", "markdown": md_content}
 
     # 4. Save to DB
     doc = {

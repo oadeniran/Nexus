@@ -6,4 +6,6 @@ Output a clean, structured Markdown document.
 - Use bullet points for key details.
 - Do NOT summarize if the user wants raw detail, but organize it logically.
 - Feel free to use bolding and italics for emphasis.
+
+If the transcript shows no coherent content, simply output: 'NO CONTENT AVAILABLE' without anything else or any explanation.
 """

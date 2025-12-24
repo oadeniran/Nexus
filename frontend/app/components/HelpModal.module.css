@@ -1,0 +1,172 @@
+/* 1. The Main Overlay (Fixed to Viewport) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3000; /* Higher than History Overlay */
+  
+  display: flex;
+  flex-direction: column;
+  
+  background: rgba(15, 15, 20, 0.98); /* Slightly darker/more opaque for focus */
+  backdrop-filter: blur(20px);
+  animation: fadeIn 0.3s ease;
+}
+
+/* 2. Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  width: 100%;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* 3. The Slide Content (Centered Wizard) */
+.slideContainer {
+  flex-grow: 1; /* Take all remaining vertical space */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  text-align: center;
+  padding: 20px 40px;
+  max-width: 500px; /* Constrain width for readability */
+  margin: 0 auto;
+}
+
+/* Icon Animation */
+.slideIcon {
+  font-size: 5rem;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 30px rgba(96, 165, 250, 0.2));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.slideTitle {
+  font-size: 2.2rem;
+  color: white;
+  margin-bottom: 20px;
+  font-weight: 800;
+  
+  /* Subtle Gradient */
+  background: linear-gradient(to bottom, #fff, #aaa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.slideText {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* 4. Footer Controls */
+.footer {
+  width: 100%;
+  padding-bottom: 50px; /* Space from bottom of screen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+/* Dots Indicator */
+.dots {
+  display: flex;
+  gap: 12px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dot.active {
+  background: #60a5fa; /* Blue active dot */
+  transform: scale(1.5);
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between Next and Close */
+}
+
+/* The "Next" Button */
+.actionBtn {
+  background: white;
+  color: black;
+  border: none;
+  padding: 14px 50px;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.actionBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 14px 30px;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.secondaryBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: white;
+}
+
+.idLabel {
+  font-size: 0.75rem;
+  color: #444;
+  font-family: monospace;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Mobile Tweak */
+@media (max-width: 600px) {
+  .slideContainer { padding: 20px; }
+  .slideTitle { font-size: 1.8rem; }
+  .slideIcon { font-size: 4rem; }
+}
