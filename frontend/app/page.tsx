@@ -5,6 +5,7 @@ import HistoryOverlay from './components/HistoryOverlay';
 import HelpModal from './components/HelpModal';
 import { useConversation } from '@11labs/react';
 import { useCallback, useState, useEffect, useRef } from 'react';
+import Orb from './components/Orb';
 
 import { AGENT_ID_ROUTER, AGENT_ID_DEBATER, AGENT_ID_COACH, API_URL } from '../lib/config';
 
@@ -340,19 +341,13 @@ export default function Home() {
         </div>
       </header>
 
-      <div 
-        className={styles.orb} 
-        onClick={toggleSession}
-        style={{
-          background: isSpeaking ? 'radial-gradient(circle, #ffffff, #e5e5e5)' 
-            : isActive ? 'radial-gradient(circle, #f87171, #ef4444)' 
-            : undefined,
-          boxShadow: isSpeaking ? '0 0 80px rgba(255, 255, 255, 0.8)'
-            : isActive ? '0 0 60px rgba(239, 68, 68, 0.6)' 
-            : undefined,
-          transform: isSpeaking ? 'scale(1.1)' : 'scale(1)'
-        }}
-      ></div>
+      <div className={styles.orbContainer}>
+         <Orb 
+           status={conversation.status} 
+           isSpeaking={conversation.isSpeaking}
+            onClick={toggleSession} 
+         />
+       </div>
 
       <p className={styles.status}>{statusMessage}</p>
      
