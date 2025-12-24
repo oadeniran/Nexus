@@ -9,6 +9,7 @@ on:
 jobs:
     Containerize-job:
         runs-on: ubuntu-latest
+        # Global check: Don't run anything if 'no-deploy' is present
         if: contains(github.event.head_commit.message, 'no-deploy') == false
         outputs:
             repo_owner_lower: ${{ steps.lowercase.outputs.repo_owner_lower }}
@@ -32,6 +33,7 @@ jobs:
 
             # --- BUILD BACKEND ---
             - name: Build and push Backend
+              if: contains(github.event.head_commit.message, 'frontend-deploy') == false
               uses: docker/build-push-action@v5
               with:
                 context: ./backend
@@ -41,6 +43,7 @@ jobs:
 
             # --- BUILD FRONTEND ---
             - name: Build and push Frontend
+            if: contains(github.event.head_commit.message, 'backend-deploy') == false
               uses: docker/build-push-action@v5
               with:
                 context: ./frontend
@@ -49,7 +52,6 @@ jobs:
                 tags: ghcr.io/${{ steps.lowercase.outputs.repo_owner_lower }}/nexus-fe:v1-${{ github.sha }}
           
     Deploy-job:
-      if: false 
       needs: 
         - Containerize-job
       runs-on: ubuntu-latest
@@ -59,15 +61,21 @@ jobs:
           with:
             creds: ${{ secrets.AZURE_CRED }}
 
-        # --- DEPLOY BACKEND ---
+        # --- DEPLOY BACKEND STEP ---
+        # Logic: Run ONLY if message does NOT contain 'frontend-deploy'
+        # (Meaning: If it contains 'backend-deploy' OR neither, we deploy this)
         - name: Deploy Backend to Web App
+          if: contains(github.event.head_commit.message, 'frontend-deploy') == false
           uses: azure/webapps-deploy@v2
           with:
             app-name: 'nexus-be' 
             images: 'ghcr.io/${{ needs.Containerize-job.outputs.repo_owner_lower }}/nexus-be:v1-${{ github.sha }}' 
 
-        # --- DEPLOY FRONTEND ---
+        # --- DEPLOY FRONTEND STEP ---
+        # Logic: Run ONLY if message does NOT contain 'backend-deploy'
+        # (Meaning: If it contains 'frontend-deploy' OR neither, we deploy this)
         - name: Deploy Frontend to Web App
+          if: contains(github.event.head_commit.message, 'backend-deploy') == false
           uses: azure/webapps-deploy@v2
           with:
             app-name: 'nexus-fe'
