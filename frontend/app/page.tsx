@@ -218,7 +218,8 @@ export default function Home() {
             dynamicVariables: {
                 topic: handoffData?.topic || "General",
                 user_context: handoffData?.context || ""
-              } });
+              } 
+            } as any);
 
         } catch (e) {
           console.error("Failed to switch agent", e);
@@ -245,7 +246,7 @@ export default function Home() {
     } else {
       try {
         await navigator.mediaDevices.getUserMedia({ audio: true });
-        await conversation.startSession({ agentId: activeAgentId });
+        await conversation.startSession({ agentId: activeAgentId } as any);
       } catch (err) {
         alert("Microphone access required.");
       }
