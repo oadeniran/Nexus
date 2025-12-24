@@ -5,8 +5,21 @@ from dtos import SaveSessionRequest, SearchRequest
 import app_logic
 
 
+tags_metadata = [
+    {
+        "name": "Nexus Brain Operations",
+        "description": "Operations related to Nexus Brain functionalities such as saving sessions, searching memory, and retrieving history.",
+    },
+]
 
-app = FastAPI()
+app = FastAPI(
+    docs_url="/dev/documentation",
+    openapi_url="/openapi.json",
+    title="Backend for Nexus Brain",
+    description="A backend service for Nexus Brain application.",
+    version="1.0.0",
+    openapi_tags=tags_metadata,
+)
 
 # Allow the Frontend (running on localhost:3000) to talk to this Backend
 app.add_middleware(
