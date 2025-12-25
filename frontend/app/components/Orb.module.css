@@ -19,8 +19,8 @@
 /* 1. THE CORE LIQUID (The Agent) */
 .liquidCore {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 95%;
+  height: 95%;
   border-radius: 50%;
   
   /* The "Water" Trick: Conic Gradient + Blur */
@@ -31,7 +31,7 @@
     #ec4899,
     #3b82f6
   );
-  filter: blur(35px);
+  filter: blur(20px);
   opacity: 0.8;
   
   /* Default: Slow Spin */
@@ -70,8 +70,8 @@
 .speaking .liquidCore {
   animation: spin 1.5s linear infinite; 
   background: conic-gradient(from 0deg, #06b6d4, #ffffff, #3b82f6, #06b6d4);
-  filter: blur(30px) brightness(1.2);
-  transform: scale(1.1);
+  filter: blur(21px) brightness(1.2);
+  transform: scale(1.05);
 }
 
 .listening .liquidCore {

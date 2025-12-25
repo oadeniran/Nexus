@@ -103,4 +103,7 @@ Nexus is a voice-first cognitive architecture designed to accelerate the journey
 - Use the Help modal in the UI for a detailed user manual.
 
 ## License
-MIT License
+
+This project is licensed under the [MIT License](LICENSE), which is an [OSI Approved License](https://opensource.org/licenses/MIT).
+
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)

@@ -1,4 +1,4 @@
-name: Nexus CI/CD
+name: Nexus CI/CD (Azure backup)
 
 on:
   workflow_dispatch:
